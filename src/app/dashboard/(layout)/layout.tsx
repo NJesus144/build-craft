@@ -16,14 +16,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Logo className="max-w-[100px] mx-auto" />
           </div>
         </div>
-
         <NavaItems />
         <div className="w-full mt-auto border-t border-muted px-3 py-4 flex items-center justify-between gap-2">
           <UserDropdown />
           <ThemeToggle />
         </div>
       </aside>
-
       <main className="p-6 flex flex-col w-full h-full overflow-auto">
         {children}
       </main>
