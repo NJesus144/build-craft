@@ -1,6 +1,8 @@
 import Logo from '@/assets/logo.svg'
 import { AIGenerationDropdown } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown'
 import { BasicInfoSection } from '@/components/pages/resume/infos-sidebar/sections/basic-info'
+import { MultipesSections } from '@/components/pages/resume/infos-sidebar/sections/multiples'
+import { SummarySection } from '@/components/pages/resume/infos-sidebar/sections/summary'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 
@@ -17,6 +19,9 @@ export const InfosSidebar = () => {
       <Separator className="my-5" />
 
       <BasicInfoSection />
+      <Separator className="my-5" />
+      <SummarySection />
+      <MultipesSections />
     </aside>
   )
 }

@@ -25,6 +25,14 @@ export const ResumePage = () => {
         phone: '',
         website: '',
       },
+      summary: '',
+      certifications: [],
+      educations: [],
+      experiences: [],
+      languages: [],
+      projects: [],
+      skills: [],
+      socialMedias: [],
     },
   }
 
