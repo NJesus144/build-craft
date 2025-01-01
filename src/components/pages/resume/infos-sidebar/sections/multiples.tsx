@@ -14,9 +14,14 @@ import {
   Share2,
 } from 'lucide-react'
 import { Fragment, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 export const MultipesSections = () => {
+  const { getValues } = useFormContext()
   const [sectionToAdd, setSectionToAdd] = useState<MultipleDragItemData | null>(
+    null,
+  )
+  const [initialData, setInitialData] = useState<MultipleDragItemData | null>(
     null,
   )
 
@@ -71,6 +76,15 @@ export const MultipesSections = () => {
       descriptionKey: 'description',
     },
   ]
+
+  const onEdit = (section: MultipleDragItemData, index: number) => {
+    const currentValues = getValues()
+    const currentItems = currentValues.content[section.formKey]
+
+    setSectionToAdd(section)
+    setInitialData(currentItems[index])
+  }
+
   return (
     <div>
       {sectionsKeys.map((section) => (
@@ -79,17 +93,21 @@ export const MultipesSections = () => {
           <MultipleDragList
             data={section}
             onAdd={() => setSectionToAdd(section)}
-            onEdit={() => {}}
+            onEdit={(index) => onEdit(section, index)}
           />
         </Fragment>
       ))}
 
       {sectionToAdd && (
         <ManageMultipleItemDialog
+          initialData={initialData}
           data={sectionToAdd}
           open={!!sectionToAdd}
           setOpen={(value) => {
-            if (!value) setSectionToAdd(null)
+            if (!value) {
+              setSectionToAdd(null)
+              setInitialData(null)
+            }
           }}
         />
       )}
