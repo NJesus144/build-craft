@@ -7,6 +7,7 @@ interface InputFieldProps extends ComponentProps<typeof Input> {
   label: string
   name: string
   className?: string
+  extraContent?: (value: string) => React.ReactNode
 }
 
 export const InputField = ({
@@ -14,6 +15,7 @@ export const InputField = ({
   name,
   required,
   className,
+  extraContent,
   ...props
 }: InputFieldProps) => {
   const { control } = useFormContext()
@@ -32,6 +34,7 @@ export const InputField = ({
           error={fieldState?.error}
         >
           <Input {...props} {...field} />
+          {extraContent && extraContent(field.value)}
         </FieldWrapper>
       )}
     />
