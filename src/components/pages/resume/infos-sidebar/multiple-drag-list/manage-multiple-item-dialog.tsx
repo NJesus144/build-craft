@@ -2,11 +2,13 @@ import {
   MultipleDragItemData,
   ResumeArrayKeys,
 } from '@/components/pages/resume/infos-sidebar/multiple-drag-list'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { BaseDialogProps, Dialog } from '@/components/ui/dialog'
 import { EditorField } from '@/components/ui/editor/field'
 import { IconField } from '@/components/ui/icon-input/field'
 import { InputField } from '@/components/ui/input/field'
+import { SliderField } from '@/components/ui/slider/field'
 import { cn } from '@/lib/utils'
 import { Fragment, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -262,7 +264,20 @@ export const ManageMultipleItemDialog = ({
           {fieldType === 'text' && <InputField {...inputProps} />}
           {fieldType === 'editor' && <EditorField {...inputProps} />}
           {fieldType === 'icon' && <IconField {...inputProps} />}
-          {}
+          {fieldType === 'slider' && <SliderField {...inputProps} />}
+          {fieldType === 'keywords' && (
+            <InputField
+              {...inputProps}
+              extraContent={(value) => (
+                <div className="flex gap-2 flex-wrap mt-1">
+                  {value?.split(',').map((keyword, index) => {
+                    if (!keyword.trim()) return null
+                    return <Badge key={`keyword-${index}`}>{keyword}</Badge>
+                  })}
+                </div>
+              )}
+            />
+          )}
         </Fragment>
       )
     })
