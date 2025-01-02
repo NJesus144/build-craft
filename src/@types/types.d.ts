@@ -14,6 +14,15 @@ type ResumeExperienceData = {
   summary: string
 }
 
+type ResumeInfosData = {
+  fullName: string
+  headline: string
+  email: string
+  website: string
+  phone: string
+  location: string
+}
+
 type ResumeEducationData = {
   institution: string
   degree: string
