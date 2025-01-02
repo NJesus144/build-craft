@@ -8,7 +8,6 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
 export const ResumeContent = () => {
   const { watch } = useFormContext<ResumeData>()
-
   const data = watch()
 
   return (
