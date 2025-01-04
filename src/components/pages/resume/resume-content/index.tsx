@@ -6,7 +6,11 @@ import { ResumeTemplate } from '@/components/pages/resume/resume-content/templat
 import { useFormContext } from 'react-hook-form'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 
-export const ResumeContent = () => {
+interface ResumeContentProps {
+  title: string
+}
+
+export const ResumeContent = ({ title }: ResumeContentProps) => {
   const { watch } = useFormContext<ResumeData>()
   const data = watch()
 
@@ -20,7 +24,7 @@ export const ResumeContent = () => {
         limitToBounds={false}
       >
         <>
-          <NavigationHeader />
+          <NavigationHeader title={title} />
           <TransformControls />
           <TransformComponent>
             <ResumeTemplate data={data} />
