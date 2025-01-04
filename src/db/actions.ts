@@ -6,11 +6,17 @@ import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { resumes } from './schema'
 
-export const createResume = async (title: string) => {
+const getUserIdOrThrow = async () => {
   const session = await auth()
-
   const userId = session?.user?.id
+
   if (!userId) throw new Error('User not found')
+
+  return userId
+}
+
+export const createResume = async (title: string) => {
+  const userId = await getUserIdOrThrow()
 
   const newResume = await db
     .insert(resumes)
@@ -23,9 +29,7 @@ export const createResume = async (title: string) => {
 }
 
 export const updatedResumeData = async (id: string, data: ResumeData) => {
-  const session = await auth()
-  const userId = session?.user?.id
-  if (!userId) throw new Error('User not found')
+  await getUserIdOrThrow()
 
   const updatedResume = await db
     .update(resumes)
@@ -35,4 +39,18 @@ export const updatedResumeData = async (id: string, data: ResumeData) => {
 
   revalidatePath('/dashboard/resumes')
   return updatedResume[0]
+}
+
+export const deleteResume = async (id: string) => {
+  const userId = await getUserIdOrThrow()
+
+  const resume = await db.query.resumes.findFirst({
+    where: eq(resumes.id, id),
+  })
+
+  if (!resume) throw new Error('Resume not found')
+  if (resume.userId !== userId) throw new Error('Unauthorized')
+
+  await db.delete(resumes).where(eq(resumes.id, id)).execute()
+  revalidatePath('/dashboard/resumes')
 }
