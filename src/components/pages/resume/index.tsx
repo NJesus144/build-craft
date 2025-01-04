@@ -8,24 +8,39 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
+import { updatedResumeData } from '@/db/actions'
+import { useDebounce } from '@/hooks/use-debounce'
+import { mergician } from 'mergician'
+import { User } from 'next-auth'
+import { useParams } from 'next/navigation'
+import { useCallback, useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-export const ResumePage = () => {
+interface ResumePageProps {
+  initialData: ResumeData
+  title: string
+  user?: User
+}
+
+export const ResumePage = ({ initialData, title, user }: ResumePageProps) => {
+  const params = useParams()
+  const resumeId = params.id as string
+
   const defaultValues: ResumeData = {
     content: {
+      summary: '<p></p>',
       image: {
-        url: '',
+        url: user?.image ?? '',
         visible: true,
       },
       infos: {
-        email: '',
-        fullName: '',
+        email: user?.email ?? '',
+        fullName: user?.name ?? '',
         headline: '',
         location: '',
         phone: '',
         website: '',
       },
-      summary: '',
       certifications: [],
       educations: [],
       experiences: [],
@@ -53,7 +68,31 @@ export const ResumePage = () => {
     },
   }
 
-  const methods = useForm<ResumeData>({ defaultValues })
+  const methods = useForm<ResumeData>({
+    defaultValues: mergician(defaultValues, initialData),
+  })
+
+  const data = methods.watch()
+  const debouncedData = useDebounce(JSON.stringify(data))
+  const shouldSave = useRef(false)
+
+  const handleSaveUpdates = useCallback(() => {
+    try {
+      if (!shouldSave.current) {
+        shouldSave.current = true
+        return
+      }
+
+      const updatedData = methods.getValues()
+      updatedResumeData(resumeId, updatedData)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [methods, resumeId])
+
+  useEffect(() => {
+    handleSaveUpdates()
+  }, [debouncedData, handleSaveUpdates])
 
   return (
     <FormProvider {...methods}>
@@ -65,7 +104,7 @@ export const ResumePage = () => {
           <ResizableHandle withHandle />
 
           <ResizablePanel>
-            <ResumeContent />
+            <ResumeContent title={title} />
           </ResizablePanel>
           <ResizableHandle withHandle />
 
