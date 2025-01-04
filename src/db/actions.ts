@@ -3,6 +3,7 @@
 import { db } from '@/db/drizzle'
 import { auth } from '@/lib/auth'
 import { resumes } from './schema'
+import { revalidatePath } from 'next/cache'
 
 export const createResume = async (title: string) => {
   const session = await auth()
@@ -14,6 +15,8 @@ export const createResume = async (title: string) => {
     .insert(resumes)
     .values({ title, userId })
     .returning()
+
+    revalidatePath('/dashbaord/resumes')
 
     return newResume[0]
 }
