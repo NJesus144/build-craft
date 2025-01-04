@@ -98,9 +98,9 @@ export const resumes = pgTable('resume', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('title').notNull(),
   data: json('data').default({}).notNull(),
-  userInd: text('user_id')
+  userId: text('user_id')
     .references(() => users.id, { onDelete: 'cascade' })
     .notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
