@@ -1,3 +1,4 @@
+import { DeleteResumeDialog } from '@/components/pages/resume/resume-content/delete-resume-dialog'
 import { Button } from '@/components/ui/button'
 import { Tooltip } from '@/components/ui/tooltip'
 import { Copy, Download, Home, Trash } from 'lucide-react'
@@ -26,15 +27,17 @@ export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
         <p className="text-lg font-title font-bold ml-1">{title}</p>
       </div>
       <div className="flex gap-1">
-        <Tooltip content="Deletar Currículo">
-          <Button
-            variant="secondary"
-            className="w-8 h-8 bg-transparent"
-            size="icon"
-          >
-            <Trash size={18} />{' '}
-          </Button>
-        </Tooltip>
+        <DeleteResumeDialog>
+          <Tooltip content="Deletar Currículo">
+            <Button
+              variant="secondary"
+              className="w-8 h-8 bg-transparent"
+              size="icon"
+            >
+              <Trash size={18} />{' '}
+            </Button>
+          </Tooltip>
+        </DeleteResumeDialog>
 
         <Tooltip content="Duplicar Currículo">
           <Button
