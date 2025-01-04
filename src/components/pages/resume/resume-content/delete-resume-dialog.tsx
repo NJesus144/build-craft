@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { Button } from '@/components/ui/button'
 import { BaseDialogProps, Dialog } from '@/components/ui/dialog'
@@ -15,11 +15,11 @@ export const DeleteResumeDialog = (props: BaseDialogProps) => {
   const resumeId = params.id as string
 
   const onDelete = async () => {
-    try{
+    try {
       deleteResume(resumeId)
-      toast.success("Currículo deletado com sucesso")
+      toast.success('Currículo deletado com sucesso')
       router.push('/dashboard/resumes')
-    }catch(error){
+    } catch (error) {
       console.log(error)
       toast.error('Erro ao deletar currículo')
     }
@@ -34,7 +34,9 @@ export const DeleteResumeDialog = (props: BaseDialogProps) => {
       description="Tem certeza que deseja deletar este currículo?"
       content={
         <div className="flex gap-2 ml-auto">
-          <Button onClick={() => setOpen(false)}>Cancelar</Button>
+          <Button onClick={() => setOpen(false)} variant="secondary">
+            Cancelar
+          </Button>
           <Button onClick={onDelete} variant="destructive">
             Deletar
           </Button>

@@ -1,4 +1,5 @@
 import { DeleteResumeDialog } from '@/components/pages/resume/resume-content/delete-resume-dialog'
+import { DuplicateResumeDialog } from '@/components/pages/resume/resume-content/duplicate-resume-dialog'
 import { Button } from '@/components/ui/button'
 import { Tooltip } from '@/components/ui/tooltip'
 import { Copy, Download, Home, Trash } from 'lucide-react'
@@ -39,15 +40,17 @@ export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
           </Tooltip>
         </DeleteResumeDialog>
 
-        <Tooltip content="Duplicar Currículo">
-          <Button
-            variant="secondary"
-            className="w-8 h-8 bg-transparent"
-            size="icon"
-          >
-            <Copy size={18} />{' '}
-          </Button>
-        </Tooltip>
+        <DuplicateResumeDialog>
+          <Tooltip content="Duplicar Currículo">
+            <Button
+              variant="secondary"
+              className="w-8 h-8 bg-transparent"
+              size="icon"
+            >
+              <Copy size={18} />{' '}
+            </Button>
+          </Tooltip>
+        </DuplicateResumeDialog>
 
         <Tooltip content="Baixar PDF">
           <Button
