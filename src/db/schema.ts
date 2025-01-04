@@ -1,14 +1,15 @@
 import {
   boolean,
   integer,
+  json,
   pgTable,
   primaryKey,
   text,
   timestamp,
+  uuid,
 } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
-// Auth
 export const users = pgTable('user', {
   id: text('id')
     .primaryKey()
@@ -36,11 +37,13 @@ export const accounts = pgTable(
     id_token: text('id_token'),
     session_state: text('session_state'),
   },
-  (account) => ({
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-    }),
-  }),
+  (account) => [
+    {
+      compoundKey: primaryKey({
+        columns: [account.provider, account.providerAccountId],
+      }),
+    },
+  ],
 )
 
 export const sessions = pgTable('session', {
@@ -58,11 +61,13 @@ export const verificationTokens = pgTable(
     token: text('token').notNull(),
     expires: timestamp('expires', { mode: 'date' }).notNull(),
   },
-  (verificationToken) => ({
-    compositePk: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
-  }),
+  (verificationToken) => [
+    {
+      compositePk: primaryKey({
+        columns: [verificationToken.identifier, verificationToken.token],
+      }),
+    },
+  ],
 )
 
 export const authenticators = pgTable(
@@ -79,9 +84,23 @@ export const authenticators = pgTable(
     credentialBackedUp: boolean('credentialBackedUp').notNull(),
     transports: text('transports'),
   },
-  (authenticator) => ({
-    compositePK: primaryKey({
-      columns: [authenticator.userId, authenticator.credentialID],
-    }),
-  }),
+  (authenticator) => [
+    {
+      compositePK: primaryKey({
+        columns: [authenticator.userId, authenticator.credentialID],
+      }),
+    },
+  ],
 )
+// Platform
+
+export const resumes = pgTable('resume', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  data: json('data').default({}).notNull(),
+  userInd: text('user_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('created_at').defaultNow().notNull(),
+})
