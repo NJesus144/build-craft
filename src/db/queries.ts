@@ -2,9 +2,8 @@ import { db } from '@/db/drizzle'
 import { resumes } from '@/db/schema'
 import { ResumeDto } from '@/db/types'
 import { auth } from '@/lib/auth'
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { cache } from 'react'
-import { asc, desc } from 'drizzle-orm'
 
 export const getResumes = cache(async (): Promise<ResumeDto[]> => {
   const session = await auth()
@@ -19,3 +18,16 @@ export const getResumes = cache(async (): Promise<ResumeDto[]> => {
 
   return userResumes
 })
+
+export const getResumeById = cache(
+  async (id: string): Promise<ResumeDto | undefined> => {
+    const session = await auth()
+    const userId = session?.user?.id
+
+    if (!userId) return undefined
+
+    const resume = await db.query.resumes.findFirst({
+      where: eq(resumes.id, id),
+    })
+    return resume
+  })
