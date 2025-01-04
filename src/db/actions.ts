@@ -54,3 +54,22 @@ export const deleteResume = async (id: string) => {
   await db.delete(resumes).where(eq(resumes.id, id)).execute()
   revalidatePath('/dashboard/resumes')
 }
+
+export const duplicateResume = async (id: string, title: string) => {
+  const userId = await getUserIdOrThrow()
+
+  const resume = await db.query.resumes.findFirst({
+    where: eq(resumes.id, id),
+  })
+
+  if (!resume) throw new Error('Resume not found')
+
+  const newResume = await db
+    .insert(resumes)
+    .values({ title, userId, data: resume.data })
+    .returning()
+
+  revalidatePath('/dashboard/resumes')
+
+  return newResume[0]
+}
