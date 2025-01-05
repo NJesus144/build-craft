@@ -1,3 +1,4 @@
+import { GenerateToFixContent } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog/fix-content'
 import { GenerateFromJobTitle } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog/job-title'
 import { BaseDialogProps, Dialog } from '@/components/ui/dialog'
 
@@ -13,7 +14,7 @@ export const GenerationDialog = ({ mode, ...props }: GenerationDialogProps) => {
 
   const configPerMode: Record<AIGenerationMode, JSX.Element> = {
     JOB_TITLE: <GenerateFromJobTitle onClose={onClose} />,
-    FIX_CONTENT: <div>Melhorar e corrigir o conteúdo existente</div>,
+    FIX_CONTENT: <GenerateToFixContent onClose={onClose} />,
     TRANSLATE_CONTENT: <div>Traduzir conteúdo existente</div>,
   }
 
