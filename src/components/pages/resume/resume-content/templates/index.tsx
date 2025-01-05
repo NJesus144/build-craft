@@ -21,7 +21,6 @@ const templatesMap: Record<ResumeTemplates, React.FC<BaseResumeProps>> = {
 
 export const ResumeTemplate = ({ data }: ResumeTemplateProps) => {
   const template = data.structure.template
-
   const Resume = useMemo(() => {
     return templatesMap[template]
   }, [template])
