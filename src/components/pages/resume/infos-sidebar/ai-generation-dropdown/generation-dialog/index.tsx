@@ -1,5 +1,6 @@
 import { GenerateToFixContent } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog/fix-content'
 import { GenerateFromJobTitle } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog/job-title'
+import { GenerateTranslation } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog/translate'
 import { BaseDialogProps, Dialog } from '@/components/ui/dialog'
 
 interface GenerationDialogProps extends BaseDialogProps {
@@ -15,7 +16,7 @@ export const GenerationDialog = ({ mode, ...props }: GenerationDialogProps) => {
   const configPerMode: Record<AIGenerationMode, JSX.Element> = {
     JOB_TITLE: <GenerateFromJobTitle onClose={onClose} />,
     FIX_CONTENT: <GenerateToFixContent onClose={onClose} />,
-    TRANSLATE_CONTENT: <div>Traduzir conteúdo existente</div>,
+    TRANSLATE_CONTENT: <GenerateTranslation onClose={onClose}/>,
   }
 
   const content = configPerMode[mode]
