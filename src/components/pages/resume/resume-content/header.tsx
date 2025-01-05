@@ -2,6 +2,7 @@ import { DeleteResumeDialog } from '@/components/pages/resume/resume-content/del
 import { DuplicateResumeDialog } from '@/components/pages/resume/resume-content/duplicate-resume-dialog'
 import { Button } from '@/components/ui/button'
 import { Tooltip } from '@/components/ui/tooltip'
+import { useResumeDownload } from '@/hooks/use-resume-download'
 import { Copy, Download, Home, Trash } from 'lucide-react'
 import Link from 'next/link'
 
@@ -10,6 +11,8 @@ interface NavigationHeaderProps {
 }
 
 export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
+  const { handleDownloadResume } = useResumeDownload(title)
+
   return (
     <header className="absolute w-full left-0 top-0 z-10 p-2 bg-backgroud border-b border-muted flex items-center justify-between gap-2">
       <div className="flex items-center gap-2">
@@ -57,6 +60,7 @@ export const NavigationHeader = ({ title }: NavigationHeaderProps) => {
             variant="secondary"
             className="w-8 h-8 bg-transparent"
             size="icon"
+            onClick={handleDownloadResume}
           >
             <Download size={18} />{' '}
           </Button>
