@@ -25,8 +25,19 @@ const fixContent = async (content: ResumeContentData) => {
   return data
 }
 
+interface AiTranslatePayload {
+  content: ResumeContentData
+  language: string
+}
+
+const translate = async (payload: AiTranslatePayload) => {
+  const { data } = await api.post("/generate/translate", payload)
+  return data
+}
+
 export const ApiService = {
   getResumeUrl,
   fixContent,
+  translate,
   generateContentForJob,
 }
