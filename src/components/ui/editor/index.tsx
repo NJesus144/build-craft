@@ -6,6 +6,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import { useEffect } from 'react'
 
 interface EditorProps {
   value: string
@@ -48,6 +49,16 @@ export const Editor = ({ value, onChange, className }: EditorProps) => {
     autofocus: false,
   })
 
+  useEffect(() => {
+    const editorHTML = editor?.getHTML()
+
+    if (editorHTML !== value) {
+      setTimeout(() => {
+        editor?.commands.setContent(value)
+      })
+    }
+  }, [value])
+
   return (
     <div
       className={cn(
@@ -56,7 +67,7 @@ export const Editor = ({ value, onChange, className }: EditorProps) => {
       )}
     >
       <MenuBar editor={editor} />
-      <div className='h-full [&>div]:h-full flex flex-col overflow-y-auto'>
+      <div className="h-full [&>div]:h-full flex flex-col overflow-y-auto">
         <EditorContent editor={editor} />
       </div>
     </div>
