@@ -1,10 +1,9 @@
-import { ThemeProvider } from '@/components/shared/theme-provider'
 import { cn } from '@/lib/utils'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { Nunito, Nunito_Sans } from 'next/font/google'
-import { Toaster } from 'sonner'
 
+import { ClientProviders } from '@/components/shared/client-providers'
 import { setDefaultOptions } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -31,15 +30,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   )
