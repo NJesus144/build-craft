@@ -16,11 +16,17 @@ interface AIGenerationPayload {
 }
 
 const generateContentForJob = async (payload: AIGenerationPayload) => {
-  const { data } = await api.post("/generate/job-title", payload)
+  const { data } = await api.post('/generate/job-title', payload)
+  return data
+}
+
+const fixContent = async (content: ResumeContentData) => {
+  const { data } = await api.post('/generate/fix-content', { content })
   return data
 }
 
 export const ApiService = {
   getResumeUrl,
-  generateContentForJob
+  fixContent,
+  generateContentForJob,
 }
