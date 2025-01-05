@@ -1,3 +1,5 @@
+"use client"
+
 import { ThemeProvider } from '@/components/shared/theme-provider'
 import { useTanstackQuery } from '@/lib/tanstack-query'
 import { QueryClientProvider } from '@tanstack/react-query'
