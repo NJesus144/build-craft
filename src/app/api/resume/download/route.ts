@@ -1,5 +1,7 @@
 import { formatTailwindHTML } from '@/lib/utils'
+import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer'
+import puppeteerCore from 'puppeteer-core'
 
 export const POST = async (request: Request) => {
   try {
@@ -9,10 +11,23 @@ export const POST = async (request: Request) => {
     if (!html || !structure)
       return Response.json({ message: 'Invalid fields' }, { status: 400 })
 
-    const browser = await puppeteer.launch()
+    let browser = null
+
+    if (process.env.NODE_ENV === 'development') {
+      browser = await puppeteer.launch()
+    } else {
+      browser = await puppeteerCore.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      })
+    }
+
     const page = await browser.newPage()
     await page.setContent(formatTailwindHTML(html, structure))
 
+    // @ts-expect-error
     const bodyHeight = await page.evaluate(() => {
       return document.body.scrollHeight + 20
     })
