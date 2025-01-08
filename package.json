@@ -57,6 +57,7 @@
     "shadcn": "^2.1.8",
     "slider": "^1.0.4",
     "sonner": "^1.7.1",
+    "stripe": "^17.5.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.3",
