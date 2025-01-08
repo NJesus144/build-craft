@@ -1,4 +1,5 @@
 import { GenerationDialog } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog'
+import { BuyCreditsDialog } from '@/components/pages/resume/infos-sidebar/buy-credits-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -8,6 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Skeleton } from '@/components/ui/skeleton'
+import { queryKeys } from '@/constants/query-keys'
+import { ApiService } from '@/services/api'
+import { useQuery } from '@tanstack/react-query'
 import {
   BadgeCent,
   Bot,
@@ -19,6 +24,7 @@ import {
 import { useState } from 'react'
 
 export const AIGenerationDropdown = () => {
+  const [showCreditsDialog, setShowCreditsDialog] = useState(false)
   const [generationMode, setGenerationMode] = useState<AIGenerationMode | null>(
     null,
   )
@@ -26,7 +32,7 @@ export const AIGenerationDropdown = () => {
     {
       label: 'Comprar créditos',
       icon: CirclePercent,
-      onClick: () => console.log('Comprar créditos'),
+      onClick: () => setShowCreditsDialog(true),
     },
     {
       label: 'Gerar conteúdo para vaga de emprego',
@@ -45,6 +51,11 @@ export const AIGenerationDropdown = () => {
     },
   ]
 
+  const { data: credits, isLoading } = useQuery({
+    queryKey: queryKeys.credits,
+    queryFn: ApiService.getCredits,
+  })
+
   return (
     <>
       <DropdownMenu>
@@ -59,7 +70,8 @@ export const AIGenerationDropdown = () => {
             Você possui
             <strong className="text-foreground inline-flex gap-0.5 items-center">
               <BadgeCent size={14} />
-              20 créditos
+              {isLoading ? <Skeleton className="w-5 h-5" /> : credits}{' '}
+              {credits === 1 ? 'crédito' : 'créditos'}
             </strong>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -69,6 +81,7 @@ export const AIGenerationDropdown = () => {
               key={action.label}
               className="gap-2"
               onClick={action.onClick}
+              disabled={isLoading}
             >
               <action.icon size={20} className="text-muted-foreground" />
               {action.label}
@@ -76,6 +89,11 @@ export const AIGenerationDropdown = () => {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <BuyCreditsDialog
+        open={showCreditsDialog}
+        setOpen={setShowCreditsDialog}
+      />
 
       {!!generationMode && (
         <GenerationDialog
