@@ -1,7 +1,12 @@
 import Logo from '@/assets/logo.svg'
 import { Button } from '@/components/ui/button'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  description: "Um criador de currículos gratuito e fácil de usar",
+}
 
 export default function Home() {
   return (
