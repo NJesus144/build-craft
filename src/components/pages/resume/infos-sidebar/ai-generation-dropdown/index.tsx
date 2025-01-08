@@ -1,5 +1,5 @@
 import { GenerationDialog } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/generation-dialog'
-import { BuyCreditsDialog } from '@/components/pages/resume/infos-sidebar/buy-credits-dialog'
+import { BuyCreditsDialog } from '@/components/pages/resume/infos-sidebar/ai-generation-dropdown/buy-credits-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -22,12 +22,28 @@ import {
   PencilLine,
 } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const AIGenerationDropdown = () => {
   const [showCreditsDialog, setShowCreditsDialog] = useState(false)
   const [generationMode, setGenerationMode] = useState<AIGenerationMode | null>(
     null,
   )
+
+  const onAction = (mode: AIGenerationMode) => {
+    if(!credits) {
+      toast.error('Você não possui créditos suficientes para realizar essa ação.', {
+        action: {
+          label: "Comprar créditos",
+          onClick: () => setShowCreditsDialog(true),
+        }
+      })
+      return
+    }
+
+    setGenerationMode(mode)
+  }
+
   const actions = [
     {
       label: 'Comprar créditos',
@@ -37,17 +53,17 @@ export const AIGenerationDropdown = () => {
     {
       label: 'Gerar conteúdo para vaga de emprego',
       icon: BriefcaseBusiness,
-      onClick: () => setGenerationMode('JOB_TITLE'),
+      onClick: () => onAction('JOB_TITLE'),
     },
     {
       label: 'Melhorar e corrigir o conteúdo existente',
       icon: PencilLine,
-      onClick: () => setGenerationMode('FIX_CONTENT'),
+      onClick: () => onAction('FIX_CONTENT'),
     },
     {
       label: 'Traduzir conteúdo existene',
       icon: Languages,
-      onClick: () => setGenerationMode('TRANSLATE_CONTENT'),
+      onClick: () => onAction('TRANSLATE_CONTENT'),
     },
   ]
 
