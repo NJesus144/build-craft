@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
+import { Skeleton } from '@/components/ui/skeleton'
 import { queryKeys } from '@/constants/query-keys'
 import { ApiService } from '@/services/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -13,7 +14,7 @@ interface BuyCreditsDialogProps {
 
 export const BuyCreditsDialog = ({ open, setOpen }: BuyCreditsDialogProps) => {
   const pathname = usePathname()
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: queryKeys.packages,
     queryFn: ApiService.getPackages,
   })
@@ -45,6 +46,13 @@ export const BuyCreditsDialog = ({ open, setOpen }: BuyCreditsDialogProps) => {
       description="Compre créditos para gerar conteúdo de forma mais rápida e eficiente."
       content={
         <div className="flex flex-col gap-4">
+          {isLoading && (
+            <>
+            <Skeleton className="h-[70px]"/>
+            <Skeleton className="h-[70px]"/>
+            <Skeleton className="h-[70px]"/>
+            </>
+          )}
           {packages?.map((item) => (
             <Button
               key={item.credits}
