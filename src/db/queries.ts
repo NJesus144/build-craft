@@ -1,5 +1,5 @@
 import { db } from '@/db/drizzle'
-import { resumes } from '@/db/schema'
+import { resumes, users } from '@/db/schema'
 import { ResumeDto } from '@/db/types'
 import { auth } from '@/lib/auth'
 import { desc, eq } from 'drizzle-orm'
@@ -30,4 +30,18 @@ export const getResumeById = cache(
       where: eq(resumes.id, id),
     })
     return resume
+  },
+)
+
+export const getUserCredits = cache(async () => {
+  const session = await auth()
+
+  const uderId = session?.user?.id
+  if (!uderId) return 0
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, uderId),
   })
+
+  return user?.credits ?? 0
+})

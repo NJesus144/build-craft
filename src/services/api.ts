@@ -1,4 +1,5 @@
 import { api } from '@/lib/axios'
+import Stripe from 'stripe'
 
 interface ResumeDownloadPayload {}
 
@@ -31,13 +32,34 @@ interface AiTranslatePayload {
 }
 
 const translate = async (payload: AiTranslatePayload) => {
-  const { data } = await api.post("/generate/translate", payload)
+  const { data } = await api.post('/generate/translate', payload)
   return data
+}
+
+const getCredits = async () => {
+  const { data } = await api.get<{ credits: number }>('/credits')
+  return data?.credits ?? 0
+}
+
+const getPackages = async () => {
+  const { data } = await api.get<Stripe.Price[]>('/credits/packages')
+  return data
+}
+
+const getCheckoutUrl = async (priceId: string, currentPathname: string) => {
+  const { data } = await api.post<{ url: string }>(
+    '/credits/packages/checkout',
+    { priceId, currentPathname },
+  )
+  return data.url
 }
 
 export const ApiService = {
   getResumeUrl,
   fixContent,
   translate,
+  getCredits,
+  getPackages,
+  getCheckoutUrl,
   generateContentForJob,
 }
