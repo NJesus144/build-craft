@@ -1,4 +1,11 @@
-'use client'
+"use client"
+
+import { mergician } from 'mergician'
+import { User } from 'next-auth'
+import { useParams } from 'next/navigation'
+import { useCallback, useEffect, useRef } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useMediaQuery } from 'react-responsive'
 
 import { InfosSidebar } from '@/components/pages/resume/infos-sidebar'
 import { ResumeContent } from '@/components/pages/resume/resume-content'
@@ -10,11 +17,6 @@ import {
 } from '@/components/ui/resizable'
 import { updatedResumeData } from '@/db/actions'
 import { useDebounce } from '@/hooks/use-debounce'
-import { mergician } from 'mergician'
-import { User } from 'next-auth'
-import { useParams } from 'next/navigation'
-import { useCallback, useEffect, useRef } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
 
 interface ResumePageProps {
   initialData: ResumeData
@@ -23,6 +25,7 @@ interface ResumePageProps {
 }
 
 export const ResumePage = ({ initialData, title, user }: ResumePageProps) => {
+  const isMobile = useMediaQuery({ maxWidth: 768 })
   const params = useParams()
   const resumeId = params.id as string
 
@@ -96,23 +99,49 @@ export const ResumePage = ({ initialData, title, user }: ResumePageProps) => {
 
   return (
     <FormProvider {...methods}>
-      <main className="w-full h-screen overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="w-full h-full">
-          <ResizablePanel minSize={20} maxSize={40} defaultSize={30}>
-            <InfosSidebar />
+      <main className={`w-full ${isMobile ? 'h-[300vh]' : 'h-screen'} overflow-x-hidden`}>
+        <ResizablePanelGroup
+          direction={isMobile ? 'vertical' : 'horizontal'}
+          className="w-full h-full"
+        >
+          <ResizablePanel
+            minSize={isMobile ? 33.33 : 20}
+            maxSize={isMobile ? 33.33 : 40}
+            defaultSize={isMobile ? 33.33 : 30}
+            className={isMobile ? 'h-screen' : ''}
+          >
+            <div className="h-full overflow-y-auto">
+              <InfosSidebar />
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
 
-          <ResizablePanel>
-            <ResumeContent title={title} />
+          <ResizablePanel
+            minSize={isMobile ? 33.33 : 20}
+            maxSize={isMobile ? 33.33 : 60}
+            defaultSize={isMobile ? 33.33 : 45}
+            className={isMobile ? 'h-screen' : ''}
+          >
+            <div className="h-full overflow-y-auto">
+              <ResumeContent title={title} />
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
 
-          <ResizablePanel minSize={20} maxSize={35} defaultSize={25}>
-            <StructureSidebar />
+          <ResizablePanel
+            minSize={isMobile ? 33.33 : 20}
+            maxSize={isMobile ? 33.33 : 35}
+            defaultSize={isMobile ? 33.33 : 25}
+            className={isMobile ? 'h-screen' : ''}
+          >
+            <div className="h-full overflow-y-auto">
+              <StructureSidebar />
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </main>
     </FormProvider>
   )
 }
+
+export default ResumePage
