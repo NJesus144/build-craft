@@ -36,11 +36,11 @@ export const getResumeById = cache(
 export const getUserCredits = cache(async () => {
   const session = await auth()
 
-  const uderId = session?.user?.id
-  if (!uderId) return 0
+  const userId = session?.user?.id
+  if (!userId) return 0
 
   const user = await db.query.users.findFirst({
-    where: eq(users.id, uderId),
+    where: eq(users.id, userId),
   })
 
   return user?.credits ?? 0

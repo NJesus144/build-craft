@@ -33,7 +33,6 @@ export const BuyCreditsDialog = ({ open, setOpen }: BuyCreditsDialogProps) => {
     mutationFn: (priceId: string) =>
       ApiService.getCheckoutUrl(priceId, pathname),
     onSuccess: (url) => {
-      console.log(url)
       location.href = url
     },
   })

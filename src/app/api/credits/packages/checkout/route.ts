@@ -6,7 +6,6 @@ import { eq } from 'drizzle-orm'
 
 export const POST = async (request: Request) => {
   const { priceId, currentPathname } = await request.json()
-
   const session = await auth()
   const userId = session?.user?.id
 
